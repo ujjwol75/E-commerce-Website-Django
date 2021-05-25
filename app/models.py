@@ -4,30 +4,32 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 STATE_CHOICES = (
-    ('jadibutti', 'jadibutti'),
-    ('koteshwor', 'koteshwor'),
-    ('lokanthali', 'lokanthali'),
-    ('baneshwor', 'baneshwor'),
-    ('ratnapark', 'ratnapark'),
-    ('kandaghari', 'kandaghari'),
-    ('thimi', 'thimi'), 
-    ('bagbazar', 'bagbazar'),
-    ('chabahil', 'chabahil'),
-    ('airport', 'airport'),
-    ('pepsi', 'pepsi')
+    ('jadibutti','jadibutti'),
+    ('koteshwor','koteshwor'),
+    ('lokanthali','lokanthali'),
+    ('baneshwor','baneshwor'),
+    ('ratnapark','ratnapark'),
+    ('kandaghari','kandaghari'),
+    ('thimi','thimi'),
+    ('bagbazar','bagbazar'),
+    ('chabahil','chabahil'),
+    ('airport','airport'),
+    ('pepsi','pepsi'),
 )
+
 
 class Customers(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     locality = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
+    state = models.CharField(choices=STATE_CHOICES, max_length=200)
     zipcode = models.IntegerField()
-    state = models.CharField(STATE_CHOICES, max_length=50)
+    
 
     def __str__(self):
         return str(self.id)
-    
+
 
 CATEGORY_CHOICES = (
     ('M', 'Mobile'),
@@ -35,6 +37,7 @@ CATEGORY_CHOICES = (
     ('TW', 'Top Wear'),
     ('BW', 'Bottom Wear')
 )
+
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
@@ -48,6 +51,7 @@ class Product(models.Model):
     def __str__(self):
         return str(self.id)
 
+
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -56,6 +60,7 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
+
 STATUS_CHOICES = (
     ('Accepted', 'Accepted'),
     ('Packed', 'Packed'),
@@ -63,12 +68,13 @@ STATUS_CHOICES = (
     ('Delivered', 'Delivered'),
     ('Cancel', 'Cancel')
 )
-    
+
+
 class OrderPlaced(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     ordered_date = models.DateTimeField(auto_now_add=True)
-    status  = models.CharField(choices=STATUS_CHOICES, max_length=50, default='pending')
-    
+    status = models.CharField(choices=STATUS_CHOICES,
+                              max_length=50, default='pending')
